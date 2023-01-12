@@ -1,5 +1,4 @@
-import pymongo
-from pymongo import collection
+import pymongo, bson, json
 from datetime import datetime
 
 # ---------------------------------------------------
@@ -57,5 +56,18 @@ class Collections:
             'maxBufferSize'     : 1e2,      #bytes
             'maxBufferCloud'    : 1e2,      #bytes
             'maxDashboardSize'  : 100       #Itens
+        }
+    ]
+
+
+class DashboardBases:
+    Collections = [
+        {
+            'name'              : 'Battery_actual',
+            'maxLength'         :  1
+        },
+        {
+            'name'              : 'pipelines',
+            'maxLength'         :  1000
         }
     ]

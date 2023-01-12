@@ -41,11 +41,11 @@ def downloadBase(database: str, collection: str):
                     }
                 },
                 {
-                    '$limit': 1000
+                    '$limit': 100
                 }
             ])
-            while documents._has_next():
-                downloadElement(document=documents.next(), local=local, cloud=cloud)
+            for document in documents:
+                downloadElement(document=document, local=local, cloud=cloud)
                        
     except Exception as e:
         eStr = str(e)

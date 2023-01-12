@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 
 # Global imports
-from GlobalSets.Mongo import Clients as MongoClient, DataBases as db, Collections as col
-import GlobalSets.c2l_functions as c2l
+from GlobalSets.Mongo import Clients as MongoClient, DataBases as db, DashboardBases as col
+import GlobalSets.l2c_functions as l2c
 
 # Import librarys
 from pymongo import collection, errors
 import bson, datetime
 
-def cloud2local():
+def syncBases():
     while(True):
         for collection in col.Collections:
-                print("\rSynchronising the collection: " + collection['name'], end='')
-                c2l.downloadBase(database=db.dbBuffer, collection=collection['name'])
+            print("\rSynchronising the collection: " + collection['name'], end='')
+            l2c.syncronize(collection=collection['name'])
+                
 
 if __name__ == '__main__':
     try:
         print(datetime.datetime.now(), 'Synchronising base')
-        cloud2local()
+        syncBases()
         print(datetime.datetime.now(), 'Synchronising stop')
     except Exception:
         print(datetime.datetime.now(), 'Synchronising stop')
