@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Global imports
-from GlobalSets.Mongo import Clients as MongoClient, DataBases as db, DashboardBases as col
+from GlobalSets.Mongo import Clients as MongoClient, DataBases as db, DashboardCollections as col
 import GlobalSets.l2c_functions as l2c
 
 # Import librarys

@@ -1,4 +1,4 @@
-import pymongo, bson, json
+import pymongo, bson, json, os
 from datetime import datetime
 
 # ---------------------------------------------------
@@ -16,6 +16,7 @@ class Clients:
     except:
         pass
 
+    UGV = '10.42.0.1'
 # ---------------------------------------------------
 # DATABASES
 class DataBases:
@@ -37,6 +38,9 @@ class Collections:
     # Collection log
     Log         = 'Log'
 
+    # Collection UGV connection
+    UGVconnec   = 'UGV_Connection' 
+
     #
     Collections = [
         {
@@ -56,11 +60,15 @@ class Collections:
             'maxBufferSize'     : 1e2,      #bytes
             'maxBufferCloud'    : 1e2,      #bytes
             'maxDashboardSize'  : 100       #Itens
+        },
+        {
+            'name'              : UGVconnec
         }
     ]
 
-
-class DashboardBases:
+# ---------------------------------------------------
+# DASHBOARD COLLECTIONS
+class DashboardCollections:
     Collections = [
         {
             'name'              : 'Battery_actual',
@@ -71,3 +79,4 @@ class DashboardBases:
             'maxLength'         :  1000
         }
     ]
+

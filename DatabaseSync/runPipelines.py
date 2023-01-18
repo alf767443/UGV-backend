@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
+
 # Global imports
-from GlobalSets.Mongo import Clients as MongoClient, DataBases as db, DashboardBases as col
-import GlobalSets.l2c_functions as l2c
+from GlobalSets.Mongo import Clients as MongoClient, DataBases as db
 
 # Import librarys
 from pymongo import collection, errors
-import bson, datetime, json, bson
+import bson, datetime, json, bson, time
 
 def documentHandler(x):
     if isinstance(x, datetime.datetime):
@@ -33,6 +34,7 @@ def newPipeline(name: str, database: str, collection: str, pipeline: dict):
 
 def executePipelines():
     while (True):
+        time.sleep(1)
         pipelines = json.loads(json.dumps(list(pipelineCol.find({})),default=documentHandler))
         for pipeline in pipelines:
             print("\rApplying pipeline: " + pipeline['name'], end='')

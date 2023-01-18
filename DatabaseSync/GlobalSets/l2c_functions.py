@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Global imports
-from .Mongo import Clients as MongoClient, DataBases as db, DashboardBases as col
+from .Mongo import Clients as MongoClient, DataBases as db, DashboardCollections as col
 
 # Import librarys
 from pymongo import collection, errors
