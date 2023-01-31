@@ -39,12 +39,12 @@ class NanConverter(json.JSONEncoder):
     def default(self, obj):
         my_handler(obj)
         pass
-    # def encode(self, obj, *args, **kwargs):
-    #     obj = nan2None(obj)
-    #     return super().encode(obj, *args, **kwargs)
-    # def iterencode(self, obj, *args, **kwargs):
-    #     obj = nan2None(obj)
-    #     return super().iterencode(obj, *args, **kwargs)
+    def encode(self, obj, *args, **kwargs):
+        obj = nan2None(obj)
+        return super().encode(obj, *args, **kwargs)
+    def iterencode(self, obj, *args, **kwargs):
+        obj = nan2None(obj)
+        return super().iterencode(obj, *args, **kwargs)
 
 # Query table API
 @csrf_exempt
@@ -54,5 +54,5 @@ def query(request,query=''):
         database = raw['database']
         collection = raw['collection']
         pipeline = raw['pipeline']
-        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), default=my_handler, allow_nan=True))        
+        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))        
         return JsonResponse(result,safe=False)
