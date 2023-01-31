@@ -17,11 +17,29 @@ def my_handler(x):
         return x.isoformat()
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
-    elif isinstance(x, float) and math.isnan(x):
-        return None
     else:
         print(x)
         raise TypeError(x)
+
+def nan2None(obj):
+    if isinstance(obj, dict):
+        return {k:nan2None(v) for k,v in obj.items()}
+    elif isinstance(obj, list):
+        return [nan2None(v) for v in obj]
+    elif isinstance(obj, float) and math.isnan(obj):
+        return None
+    return obj
+
+class NanConverter(json.JSONEncoder):
+    def default(self, obj):
+        my_handler(obj)
+        pass
+    def encode(self, obj, *args, **kwargs):
+        obj = nan2None(obj)
+        return super().encode(obj, *args, **kwargs)
+    def iterencode(self, obj, *args, **kwargs):
+        obj = nan2None(obj)
+        return super().iterencode(obj, *args, **kwargs)
 
 # Query table API
 @csrf_exempt
@@ -31,6 +49,6 @@ def query(request,query=''):
         database = raw['database']
         collection = raw['collection']
         pipeline = raw['pipeline']
-        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)),default=my_handler, allow_nan=False))
+        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)),cls=NanConverter, allow_nan=False))
         print(result)
         return JsonResponse(result,safe=False)
