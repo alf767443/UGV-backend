@@ -17,8 +17,7 @@ def my_handler(x):
         return x.isoformat()
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
-    elif isinstance(x, math.nan):
-        print(str(x))
+    elif isinstance(x, float) and math.isnan(x):
         return None
     else:
         print(x)
