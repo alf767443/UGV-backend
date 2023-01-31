@@ -20,6 +20,7 @@ def my_handler(x):
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
     else:
+        print(x)
         raise TypeError(x)
 
 def nan2None(obj):
