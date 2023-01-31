@@ -10,6 +10,8 @@ from django.core.files.storage import default_storage
 
 import bson, datetime, json, math
 
+import time
+
 Client = MongoClient('mongodb://localhost:27017/')
 
 def my_handler(x):
@@ -49,4 +51,7 @@ def query(request,query=''):
         collection = raw['collection']
         pipeline = raw['pipeline']
         result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), default=my_handler, allow_nan=False))
+        print(result)
+        time.sleep(10)
+        
         return JsonResponse(result,safe=False)
