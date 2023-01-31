@@ -54,8 +54,5 @@ def query(request,query=''):
         database = raw['database']
         collection = raw['collection']
         pipeline = raw['pipeline']
-        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), default=my_handler, allow_nan=False,))
-        print(result)
-        time.sleep(10)
-        
+        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), default=my_handler, allow_nan=False))        
         return JsonResponse(result,safe=False)
