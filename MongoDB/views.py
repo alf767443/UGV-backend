@@ -19,6 +19,9 @@ def my_handler(x):
         return x.isoformat()
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
+    elif isinstance(x, json.JSONDecodeError):
+        print(x)
+        return str(x)
     else:
         print(x)
         raise TypeError(x)
