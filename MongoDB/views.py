@@ -21,6 +21,7 @@ def my_handler(x):
         print(str(x))
         return None
     else:
+        print(x)
         raise TypeError(x)
 
 # Query table API
