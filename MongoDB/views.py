@@ -18,7 +18,6 @@ def my_handler(x):
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
     else:
-        print(x)
         raise TypeError(x)
 
 def nan2None(obj):
@@ -50,5 +49,4 @@ def query(request,query=''):
         collection = raw['collection']
         pipeline = raw['pipeline']
         result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)),cls=NanConverter, allow_nan=False))
-        print(result)
         return JsonResponse(result,safe=False)
