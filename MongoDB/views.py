@@ -8,7 +8,7 @@ from pymongo import MongoClient
 
 from django.core.files.storage import default_storage
 
-import bson, datetime, json
+import bson, datetime, json, math
 
 Client = MongoClient('mongodb://localhost:27017/')
 
@@ -17,6 +17,8 @@ def my_handler(x):
         return x.isoformat()
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
+    elif isinstance(x, math.nan):
+        return None
     else:
         raise TypeError(x)
 
