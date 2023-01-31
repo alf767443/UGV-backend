@@ -27,7 +27,11 @@ def my_handler(x):
         raise TypeError(x)
 
 def nan2None(obj):
-    if isinstance(obj, dict):
+    if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+    elif isinstance(obj, bson.objectid.ObjectId):
+        return str(obj)
+    elif isinstance(obj, dict):
         return {k:nan2None(v) for k,v in obj.items()}
     elif isinstance(obj, list):
         return [nan2None(v) for v in obj]
