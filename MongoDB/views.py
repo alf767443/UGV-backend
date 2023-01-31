@@ -8,7 +8,7 @@ from pymongo import MongoClient
 
 from django.core.files.storage import default_storage
 
-import bson, datetime, json, math
+import bson, datetime, json, math, numpy
 
 import time
 
@@ -19,9 +19,9 @@ def my_handler(x):
         return x.isoformat()
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
-    elif isinstance(x, json.JSONDecodeError):
+    elif isinstance(x, numpy.nan):
         print(x)
-        return str(x)
+        return None
     else:
         print(x)
         raise TypeError(x)
@@ -54,7 +54,7 @@ def query(request,query=''):
         database = raw['database']
         collection = raw['collection']
         pipeline = raw['pipeline']
-        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), default=my_handler, allow_nan=False))
+        result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), default=my_handler, allow_nan=False,))
         print(result)
         time.sleep(10)
         
