@@ -33,12 +33,12 @@ class NanConverter(json.JSONEncoder):
     def default(self, obj):
         my_handler(obj)
         pass
-    def encode(self, obj, *args, **kwargs):
-        obj = nan2None(obj)
-        return super().encode(obj, *args, **kwargs)
-    def iterencode(self, obj, *args, **kwargs):
-        obj = nan2None(obj)
-        return super().iterencode(obj, *args, **kwargs)
+    # def encode(self, obj, *args, **kwargs):
+    #     obj = nan2None(obj)
+    #     return super().encode(obj, *args, **kwargs)
+    # def iterencode(self, obj, *args, **kwargs):
+    #     obj = nan2None(obj)
+    #     return super().iterencode(obj, *args, **kwargs)
 
 # Query table API
 @csrf_exempt
