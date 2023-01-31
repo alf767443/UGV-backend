@@ -18,6 +18,7 @@ def my_handler(x):
     elif isinstance(x, bson.objectid.ObjectId):
         return str(x)
     elif isinstance(x, math.nan):
+        print(str(x))
         return None
     else:
         raise TypeError(x)
