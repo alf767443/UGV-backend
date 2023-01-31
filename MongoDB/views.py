@@ -23,6 +23,7 @@ def my_handler(x):
         return None
     else:
         print(x)
+        print('_______________________________________________________________________________________________________')
         raise TypeError(x)
 
 def nan2None(obj):
