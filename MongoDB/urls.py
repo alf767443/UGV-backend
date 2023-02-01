@@ -6,5 +6,5 @@ urlpatterns=[
     url(r'^query/$', query), # type: ignore    
     
     # First connection of UGV
-    url(r'^ugv/firstConnection$', firstConnection), # type: ignore    
+    url(r'^ugv/firstConnection/$', firstConnection), # type: ignore    
 ]
