@@ -66,7 +66,8 @@ def query(request,query=''):
 def firstConnection(request,query=''):
     if  request.method=='POST':
         raw=JSONParser().parse(request)
-        print(raw)    
-        time.sleep(10000)
-        result = []
+        print(raw)
+        result = {
+            "timedate": datetime.datetime.now().strftime()
+        }
         return JsonResponse(result,safe=False)
