@@ -68,6 +68,6 @@ def firstConnection(request,query=''):
         raw=JSONParser().parse(request)
         print(raw)
         result = {
-            "timedate": datetime.datetime.now().strftime()
+            "timedate": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         return JsonResponse(result,safe=False)
