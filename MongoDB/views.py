@@ -65,7 +65,7 @@ def query(request,query=''):
 @csrf_exempt
 def firstConnection(request,query=''):
     if  request.method=='POST':
-        raw=JSONParser().parse(request.headers)
+        raw=JSONParser().parse(request)
         print(raw)    
         time.sleep(10000)
         result = []
