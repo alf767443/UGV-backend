@@ -60,3 +60,13 @@ def query(request,query=''):
         pipeline = raw['pipeline']
         result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))        
         return JsonResponse(result,safe=False)
+
+# First connect with UGV
+@csrf_exempt
+def firstConnection(request,query=''):
+    if  request.method=='POST':
+        raw=JSONParser().parse(request)
+        print(raw)    
+        time.sleep(10000)
+        result = []
+        return JsonResponse(result,safe=False)

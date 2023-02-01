@@ -1,4 +1,5 @@
-import pymongo, bson, json, os
+import pymongo, math as rospy
+from pymongo import collection
 from datetime import datetime
 
 # ---------------------------------------------------
@@ -6,7 +7,7 @@ from datetime import datetime
 class Clients:
     # Local Client
     try:
-        LocalClient = pymongo.MongoClient('mongodb://localhost:27017/')
+        LocalClient = pymongo.MongoClient('mongodb://localhost:27017/',)
     except:
         pass
 
@@ -16,7 +17,20 @@ class Clients:
     except:
         pass
 
-    UGV = '10.42.0.1'
+    # Cloud Client
+    try:
+        ip      = '192.168.217.183'  # Remote Unit CLient
+        port    = 27017             # Port 
+        RemoteUnitClient = pymongo.MongoClient('mongodb://' + ip + ':' + str(port) + '/', connectTimeoutMS = 1000, serverSelectionTimeoutMS = 1000, socketTimeoutMS = 1000)
+    except:
+        pass
+
+# ---------------------------------------------------
+# DATASOURCE
+class DataSource:
+    # CeDRI UGV datasource
+    CeDRI_UGV = 'CeDRI_UGV'
+
 # ---------------------------------------------------
 # DATABASES
 class DataBases:
@@ -26,57 +40,76 @@ class DataBases:
     # Cloud buffer
     dbBuffer    = 'CeDRI_UGV_buffer'
 
+    # Cloud datalake
+    dataLake  = 'CeDRI_UGV_datalake'
+
 # ---------------------------------------------------
 # COLLECTIONS
 class Collections:
     # Collection battery
-    Battery     = 'Battery_Data'
+    Battery         = 'Battery'
+
+    # Collection position odometry
+    PositionOdom    = 'Position_Odometry'
+
+    # Collection position amcl
+    PositionAMCL    = 'Position_AMCL'
 
     # Collection position
-    Position    = 'Position_Data'
+    Motor           = 'Motor'
 
     # Collection log
-    Log         = 'Log'
+    Log             = 'Log'
 
-    # Collection UGV connection
-    UGVconnec   = 'UGV_Connection' 
+    # Collection LiDAR
+    LiDAR           = 'LiDAR'
 
-    #
-    Collections = [
-        {
-            'name'              : Battery,
-            'maxBufferSize'     : 2e5,      #bytes
-            'maxBufferCloud'    : 1e5,      #bytes
-            'maxDashboardSize'  : 100       #Itens
-        },
-        {
-            'name'              : Position,
-            'maxBufferSize'     : 2e5,      #bytes
-            'maxBufferCloud'    : 1e5,      #bytes
-            'maxDashboardSize'  : 100       #Itens
-        },
-        {
-            'name'              : Log,
-            'maxBufferSize'     : 1e2,      #bytes
-            'maxBufferCloud'    : 1e2,      #bytes
-            'maxDashboardSize'  : 100       #Itens
-        },
-        {
-            'name'              : UGVconnec
-        }
-    ]
+    # Collection Occupancy
+    Occupancy       = 'Occupancy'
 
 # ---------------------------------------------------
-# DASHBOARD COLLECTIONS
-class DashboardCollections:
-    Collections = [
+# FUNCTIONS
+# Log
+def log(logData:str):
+    try:
+        Clients.LocalClient[DataBases.dataLake][Collections.Log].insert_one({
+            "dateTime": datetime.now(),
+            "log": logData 
+        })
+    except:
+        pass
+
+# Size of a collection
+def sizeOf(database: collection.Collection):
+    aggreation =  [
         {
-            'name'              : 'Battery_actual',
-            'maxLength'         :  1
-        },
-        {
-            'name'              : 'pipelines',
-            'maxLength'         :  1000
+            '$collStats': {
+                'storageStats': {}
+            }
         }
     ]
+    try:
+        result = database.aggregate(aggreation)
+        result = list(result)[0]['storageStats']['size']
+    except Exception as e:
+                eStr    = str(e)
+                rospy.loginfo(eStr)
+    return result
 
+# Delete a random item
+def delRandomItem(database: collection.Collection):
+    aggreation = [
+        {
+            '$sample': {
+                'size': 1
+            }
+        }
+    ]
+    result =  database.aggregate(aggreation)
+    while result._has_next():
+            temp = result.next()
+            try:
+                database.delete_one(temp).deleted_count
+            except Exception as e:
+                eStr    = str(e)
+                rospy.loginfo(eStr)
