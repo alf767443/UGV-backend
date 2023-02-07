@@ -23,7 +23,7 @@ def saveSignalRTT():
                 'Connect': isAlive,
                 'RTT': RTT
             }
-            Clients.LocalClient[db.dbBuffer][col.UGVconnec].insert_one(data)
+            Clients.LocalClient[db.dataLake][col.Connection].insert_one(data)
         except Exception as e:
             print(e)
 

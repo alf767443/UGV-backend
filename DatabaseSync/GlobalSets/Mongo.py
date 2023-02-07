@@ -70,6 +70,9 @@ class Collections:
     # Actions
     Actions         = 'Actions'
 
+    # Connection
+    Connection      = 'Connection'
+
 # ---------------------------------------------------
 # FUNCTIONS
 # Log
