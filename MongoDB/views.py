@@ -71,3 +71,14 @@ def firstConnection(request,query=''):
             "timedate": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         return JsonResponse(result,safe=False)
+    
+# Save dashboard info
+@csrf_exempt
+def updateDocument(request,query=''):
+    if  request.method=='POST':
+        raw=JSONParser().parse(request)
+        database = raw['database']
+        collection = raw['collection']
+        pipeline = raw['pipeline']
+        result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter={'user': "default"}, update= { '$set': { "Branch" : 'ECE'} }, ))))
+        return JsonResponse(result,safe=False)
