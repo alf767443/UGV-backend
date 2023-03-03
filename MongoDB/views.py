@@ -83,6 +83,8 @@ def updateDocument(request,query=''):
         filter = raw['filter'],
         update = raw['update']
         print(raw)
+        print(database)
+        print(collection)
         print(filter)
         print(update)
         result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter={'user': 'default'}, update={ '$set': { "Branch" : 'ECE'} } ))))
