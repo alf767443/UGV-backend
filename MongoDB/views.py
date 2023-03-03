@@ -80,13 +80,13 @@ def updateDocument(request,query=''):
         database = raw['database']
         collection = raw['collection']
         # pipeline = raw['pipeline']
-        filter = raw['filter'],
+        filter = raw['filter']
         update = raw['update']
         print(raw)
         print(database)
         print(collection)
-        print(type(filter))
-        print(type(update))
-        result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter={'user': "andre"}, update={ '$set': { "Branch" : 'ECE'} } ))))
+        print(type(filter), filter)
+        print(type(update), update)
+        result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter=filter, update={ '$set': { "Branch" : 'ECE'} } ))))
         print(result)
         return JsonResponse(result,safe=False)
