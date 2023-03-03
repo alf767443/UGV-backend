@@ -83,6 +83,8 @@ def updateDocument(request,query=''):
         filter = pipeline['filter'],
         update = pipeline['update']
         print(raw)
+        print(filter)
+        print(update)
         result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter=filter, update=update, ))))
         print(result)
         return JsonResponse(result,safe=False)
