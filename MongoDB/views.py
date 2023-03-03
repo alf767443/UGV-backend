@@ -79,9 +79,9 @@ def updateDocument(request,query=''):
         raw=JSONParser().parse(request)
         database = raw['database']
         collection = raw['collection']
-        pipeline = raw['pipeline']
-        filter = pipeline['filter'],
-        update = pipeline['update']
+        # pipeline = raw['pipeline']
+        filter = raw['filter'],
+        update = raw['update']
         print(raw)
         print(filter)
         print(update)
