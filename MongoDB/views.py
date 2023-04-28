@@ -108,7 +108,7 @@ def chart(request, query=''):
         
 # Robots requests
 @csrf_exempt
-def robots(request, query=''):
+def robot(request, query=''):
     MDBchart =  Client['CeDRI_dashboard']['robots']
     if  request.method =='GET':
         try:
