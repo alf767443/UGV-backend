@@ -74,7 +74,7 @@ def chart(request, query=''):
         try:
             raw=JSONParser().parse(request)
             result = MDBchart.insert_one(raw).inserted_id
-            update = {'$set': {'name': result}}
+            update = {'$set': {'name': str(result)}}
             filter = {'_id':  bson.ObjectId(result)}
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
             return JsonResponse(result,safe=False, status=status.HTTP_201_CREATED)
