@@ -69,14 +69,26 @@ def chart(request, query=''):
             return JsonResponse(result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
+
+    elif request.method == 'PUT':
+        try:
+            raw=JSONParser().parse(request)
+            result = MDBchart.insert_one(upsert=True, filter=filter, update=update).inserted_id
+            update = {'$set': {'name': result}}
+            filter = {'_id':  bson.ObjectId(result)}
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            return JsonResponse(result,safe=False, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
+
     elif request.method == 'POST':
         try:
             raw=JSONParser().parse(request)
             filter = raw['filter']
             update = raw['update']
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
-            return JsonResponse(result,safe=False, status=status.HTTP_201_CREATED)
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            return JsonResponse(result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
