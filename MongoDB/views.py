@@ -77,7 +77,7 @@ def chart(request, query=''):
             update = raw['update']
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
             return JsonResponse(result,safe=False, status=status.HTTP_201_CREATED)
-        except:
+        except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'DELETE':
@@ -89,7 +89,7 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter))))
             print(result)
             return JsonResponse(result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
-        except:
+        except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
 # Chart requests
@@ -121,7 +121,7 @@ def user(request, query=''):
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
             print(result)
             return JsonResponse(result,safe=False)
-        except:
+        except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
 @csrf_exempt
