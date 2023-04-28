@@ -58,7 +58,8 @@ def chart(request, query=''):
     print(request)
     if  request.method=='GET':
         try:
-            print(request.GET.get)
+            print(JSONParser().parse(request))
+            # print(request.GET.get)
             
             # raw=JSONParser().parse(request)
             # print(raw)
