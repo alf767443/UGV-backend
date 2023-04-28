@@ -56,7 +56,7 @@ class NanConverter(json.JSONEncoder):
 # Chart requests
 @csrf_exempt
 def chart(request, query=''):
-    MDBchart =  Client['CeDRI_UGV_dashboard']['graphs']
+    MDBchart =  Client['CeDRI_UGV_dashboard']['charts']
     if  request.method =='GET':
         try:
             name = request.GET.get('name','')
