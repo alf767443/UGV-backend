@@ -58,18 +58,19 @@ def chart(request, query=''):
     print(0)
     if  request.method=='GET':
         try:
-            print(1)
-            raw=JSONParser().parse(request)
-            print(1)
-            name = raw['name']
-            print(1)
-            result = MongoClient.RemoteUnitClient['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
-            print(1)
-            query = result['query'] 
-            print(1)
-            result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
-            print(1)
-            return JsonResponse(result,safe=False)
+            print(request)
+            print(query)
+            # raw=JSONParser().parse(request)
+            # print(raw)
+            # name = raw['name']
+            # print(1)
+            # result = MongoClient.RemoteUnitClient['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
+            # print(1)
+            # query = result['query'] 
+            # print(1)
+            # result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
+            # print(1)
+            # return JsonResponse(result,safe=False)
         except:
             return Response({'Invalid Requisition'}, status=status.HTTP_400_BAD_REQUEST)
         
