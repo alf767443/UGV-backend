@@ -12,5 +12,5 @@ urlpatterns=[
     url(r'^ugv/firstConnection$', firstConnection), # type: ignore    
 
     # Chart query
-    url(r'^chart/$', chart), # type: ignore   
+    url(r'^chart/$', chart, name='chart'), # type: ignore   
 ]
