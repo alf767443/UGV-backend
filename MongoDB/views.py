@@ -76,13 +76,14 @@ def chart(request, query=''):
             raw=JSONParser().parse(request)
             print(raw)
             filter = raw['filter']
+            print(filter)
             update = raw['update']
-            print((filter, update))
+            print(update)
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
             print(result)
             return JsonResponse(result,safe=False)
         except:
-            return JsonResponse({},safe=False, status=status.HTTP_304_NOT_MODIFIED)
+            return JsonResponse({},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
 @csrf_exempt
 def query(request,query=''):
