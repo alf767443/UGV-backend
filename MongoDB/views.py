@@ -68,7 +68,7 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
             return JsonResponse(result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
-            return JsonResponse({},safe=False, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
         
     elif request.method == 'POST':
         try:
@@ -78,7 +78,7 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
             return JsonResponse(result,safe=False, status=status.HTTP_201_CREATED)
         except:
-            return JsonResponse({},safe=False, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'DELETE':
         try:
@@ -90,7 +90,7 @@ def chart(request, query=''):
             print(result)
             return JsonResponse(result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
         except:
-            return JsonResponse({},safe=False, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
 # Chart requests
 @csrf_exempt
@@ -107,7 +107,7 @@ def user(request, query=''):
             result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
             return JsonResponse(result,safe=False)
         except Exception as e:
-            return JsonResponse({},safe=False, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
         
     elif request.method == 'POST':
         try:
@@ -122,7 +122,7 @@ def user(request, query=''):
             print(result)
             return JsonResponse(result,safe=False)
         except:
-            return JsonResponse({},safe=False, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
 @csrf_exempt
 def query(request,query=''):
