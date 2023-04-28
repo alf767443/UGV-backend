@@ -4,6 +4,7 @@ from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.renderers import JSONRenderer
 
 
 from pymongo import MongoClient
@@ -67,7 +68,10 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
             return JsonResponse(result,safe=False)
         except Exception as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            response = Response(status=status.HTTP_404_NOT_FOUND)
+            response.accepted_renderer = JSONRenderer()
+            return response
+        
     if request.method == 'POST':
         try:
             raw=JSONParser().parse(request)
@@ -76,7 +80,10 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
             return JsonResponse(result,safe=False)
         except:
-            return Response(status=status.HTTP_304_NOT_MODIFIED)
+            response = Response(status=status.HTTP_304_NOT_MODIFIED)
+            response.accepted_renderer = JSONRenderer()
+            return response
+        
 @csrf_exempt
 def query(request,query=''):
     if  request.method=='POST':
