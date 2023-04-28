@@ -55,22 +55,28 @@ class NanConverter(json.JSONEncoder):
 # Query table API
 @csrf_exempt
 def chart(request, query=''):
-    print(request)
-    if  request.method=='GET':
+    MDBchart =  Client['CeDRI_UGV_dashboard']['graphs']
+    if  request.method =='GET':
         try:
             name = request.GET.get('name','')
-            print(name)
-            result = Client['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
-            print(result)
+            result = MDBchart.find_one(filter={'name': name})
             query = result['query'] 
-            print(query)
-            result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
+            database = query['database']
+            collection = query['collection']
+            pipeline = query['pipeline']
+            result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
             return JsonResponse(result,safe=False)
         except Exception as e:
-            print(e)
-            return JsonResponse({},safe=False)
-        
-
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'POST':
+        try:
+            raw=JSONParser().parse(request)
+            filter = raw['filter']
+            update = raw['update']
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
+            return JsonResponse(result,safe=False)
+        except:
+            return Response(status=status.HTTP_304_NOT_MODIFIED)
 @csrf_exempt
 def query(request,query=''):
     if  request.method=='POST':
