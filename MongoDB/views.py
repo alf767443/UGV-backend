@@ -55,6 +55,7 @@ class NanConverter(json.JSONEncoder):
 # Query table API
 @csrf_exempt
 def chart(request, query=''):
+    print(0)
     if  request.method=='GET':
         try:
             print(1)
