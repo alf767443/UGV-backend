@@ -56,9 +56,10 @@ class NanConverter(json.JSONEncoder):
 @csrf_exempt
 def chart(request, query=''):
     print(request)
+    print(JSONParser().parse(request))
     if  request.method=='GET':
         try:
-            print(JSONParser().parse(request))
+            print(request.GET)
             # print(request.GET.get)
             
             # raw=JSONParser().parse(request)
@@ -101,7 +102,6 @@ def firstConnection(request,query=''):
 @csrf_exempt
 def updateDocument(request,query=''):
     if  request.method=='POST':
-        request.GET.
         raw=JSONParser().parse(request)
         database = raw['database']
         collection = raw['collection']
