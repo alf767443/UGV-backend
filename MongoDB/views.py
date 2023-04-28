@@ -72,10 +72,14 @@ def chart(request, query=''):
         
     elif request.method == 'POST':
         try:
+            print(request)
             raw=JSONParser().parse(request)
+            print(raw)
             filter = raw['filter']
             update = raw['update']
+            print((filter, update))
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
+            print(result)
             return JsonResponse(result,safe=False)
         except:
             return JsonResponse({},safe=False, status=status.HTTP_304_NOT_MODIFIED)
