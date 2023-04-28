@@ -60,7 +60,7 @@ def chart(request, query=''):
         try:
             name = request.GET.get('name','')
             print(name)
-            result = MongoClient.RemoteUnitClient['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
+            result = Client['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
             print(result)
             query = result['query'] 
             print(query)
