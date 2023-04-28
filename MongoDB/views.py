@@ -53,9 +53,48 @@ class NanConverter(json.JSONEncoder):
         obj = nan2None(obj)
         return super().iterencode(obj, *args, **kwargs)
 
-# Query table API
+# Chart requests
 @csrf_exempt
 def chart(request, query=''):
+    MDBchart =  Client['CeDRI_UGV_dashboard']['graphs']
+    if  request.method =='GET':
+        try:
+            name = request.GET.get('name','')
+            result = MDBchart.find_one(filter={'name': name})
+            query = result['query'] 
+            database = query['database']
+            collection = query['collection']
+            pipeline = query['pipeline']
+            result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
+            return JsonResponse(result,safe=False, status=status.HTTP_302_FOUND)
+        except Exception as e:
+            return JsonResponse({},safe=False, status=status.HTTP_404_NOT_FOUND)
+        
+    elif request.method == 'POST':
+        try:
+            raw=JSONParser().parse(request)
+            filter = raw['filter']
+            update = raw['update']
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
+            return JsonResponse(result,safe=False, status=status.HTTP_201_CREATED)
+        except:
+            return JsonResponse({},safe=False, status=status.HTTP_400_BAD_REQUEST)
+        
+    elif request.method == 'DELETE':
+        try:
+            print(request)
+            raw=JSONParser().parse(request)
+            print(raw)
+            filter = raw['filter']
+            result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter))))
+            print(result)
+            return JsonResponse(result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+        except:
+            return JsonResponse({},safe=False, status=status.HTTP_400_BAD_REQUEST)
+        
+# Chart requests
+@csrf_exempt
+def user(request, query=''):
     MDBchart =  Client['CeDRI_UGV_dashboard']['graphs']
     if  request.method =='GET':
         try:
