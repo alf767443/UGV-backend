@@ -56,7 +56,7 @@ class NanConverter(json.JSONEncoder):
 @csrf_exempt
 def chart(request, query=''):
     print(request)
-    print(JSONParser().parse(request))
+    # print(JSONParser().parse(request))
     if  request.method=='GET':
         try:
             a = request.GET.get('name','')
