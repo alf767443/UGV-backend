@@ -68,7 +68,7 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
             return JsonResponse(result,safe=False)
         except Exception as e:
-            return JsonResponse({}, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse({},safe=False, status=status.HTTP_404_NOT_FOUND)
         
     elif request.method == 'POST':
         try:
@@ -78,7 +78,7 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
             return JsonResponse(result,safe=False)
         except:
-            return JsonResponse({}, status=status.HTTP_304_NOT_MODIFIED)
+            return JsonResponse({},safe=False, status=status.HTTP_304_NOT_MODIFIED)
         
 @csrf_exempt
 def query(request,query=''):
