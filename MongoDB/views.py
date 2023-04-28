@@ -70,7 +70,7 @@ def chart(request, query=''):
         except Exception as e:
             return JsonResponse({}, status=status.HTTP_404_NOT_FOUND)
         
-    if request.method == 'POST':
+    elif request.method == 'POST':
         try:
             raw=JSONParser().parse(request)
             filter = raw['filter']
