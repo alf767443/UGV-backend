@@ -10,4 +10,7 @@ urlpatterns=[
     
     # First connection of UGV
     url(r'^ugv/firstConnection$', firstConnection), # type: ignore    
+
+    # Chart query
+    url(r'^chart/$', chart), # type: ignore   
 ]

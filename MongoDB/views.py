@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
+from rest_framework.response import Response
+from rest_framework import status
 
 
 from pymongo import MongoClient
@@ -51,6 +53,20 @@ class NanConverter(json.JSONEncoder):
         return super().iterencode(obj, *args, **kwargs)
 
 # Query table API
+@csrf_exempt
+def chart(request, query=''):
+    if  request.method=='GET':
+        try:
+            raw=JSONParser().parse(request)
+            name = raw['name']
+            result = MongoClient.RemoteUnitClient['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
+            query = result['query'] 
+            result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
+            return JsonResponse(result,safe=False)
+        except:
+            return Response({'Invalid Requisition'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
 @csrf_exempt
 def query(request,query=''):
     if  request.method=='POST':
