@@ -70,7 +70,7 @@ def chart(request, query=''):
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
 
-    elif request.method == 'PUT':
+    elif request.method == 'POST':
         try:
             raw=JSONParser().parse(request)
             result = MDBchart.insert_one(upsert=True, filter=filter, update=update).inserted_id
@@ -82,7 +82,7 @@ def chart(request, query=''):
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
 
-    elif request.method == 'POST':
+    elif request.method == 'PUT':
         try:
             raw=JSONParser().parse(request)
             filter = raw['filter']
@@ -103,6 +103,9 @@ def chart(request, query=''):
             return JsonResponse(result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+    
+    else:
+        return JsonResponse({'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         
 # Chart requests
 @csrf_exempt
