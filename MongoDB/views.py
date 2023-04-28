@@ -59,24 +59,24 @@ def chart(request, query=''):
     # print(JSONParser().parse(request))
     if  request.method=='GET':
         try:
-            a = request.GET.get('name','')
-            print(a)
+            name = request.GET.get('name','')
             # print(request.GET.get)
             
             # raw=JSONParser().parse(request)
             # print(raw)
             # name = raw['name']
             # print(1)
-            # result = MongoClient.RemoteUnitClient['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
+            result = MongoClient.RemoteUnitClient['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
+            print(result)
+            query = result['query'] 
+            print(query)
+            result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
             # print(1)
-            # query = result['query'] 
-            # print(1)
-            # result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
-            # print(1)
-            # return JsonResponse(result,safe=False)
-            return Response({'Invalid Requisition'}, status=status.HTTP_200_OK)
+            return JsonResponse(result,safe=False)
+            # return Response({'Invalid Requisition'}, status=status.HTTP_200_OK)
         except:
-            return Response({'Invalid Requisition'}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({},safe=False)
+            # return Response({'Invalid Requisition'}, status=status.HTTP_400_BAD_REQUEST)
         
 
 @csrf_exempt
