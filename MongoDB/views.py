@@ -55,7 +55,7 @@ class NanConverter(json.JSONEncoder):
 # Chart requests
 @csrf_exempt
 def chart(request, query=''):
-    MDBchart =  Client['CeDRI_UGV_dashboard']['charts']
+    MDBchart =  Client['CeDRI_dashboard']['charts']
     if  request.method =='GET':
         try:
             name = request.GET.get('name','')
@@ -159,35 +159,7 @@ def robots(request, query=''):
     
     else:
         return JsonResponse({'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    MDBchart =  Client['CeDRI_UGV_dashboard']['graphs']
-    if  request.method =='GET':
-        try:
-            name = request.GET.get('name','')
-            result = MDBchart.find_one(filter={'name': name})
-            query = result['query'] 
-            database = query['database']
-            collection = query['collection']
-            pipeline = query['pipeline']
-            result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
-            return JsonResponse(result,safe=False)
-        except Exception as e:
-            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
-        
-    elif request.method == 'POST':
-        try:
-            print(request)
-            raw=JSONParser().parse(request)
-            print(raw)
-            filter = raw['filter']
-            print(filter)
-            update = raw['update']
-            print(update)
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update ))))
-            print(result)
-            return JsonResponse(result,safe=False)
-        except Exception as e:
-            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
-        
+    
 @csrf_exempt
 def query(request,query=''):
     if  request.method=='POST':
