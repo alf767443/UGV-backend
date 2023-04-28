@@ -59,7 +59,8 @@ def chart(request, query=''):
     print(JSONParser().parse(request))
     if  request.method=='GET':
         try:
-            print(request.GET)
+            a = request.GET.get('name','')
+            print(a)
             # print(request.GET.get)
             
             # raw=JSONParser().parse(request)
@@ -73,6 +74,7 @@ def chart(request, query=''):
             # result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
             # print(1)
             # return JsonResponse(result,safe=False)
+            return Response({'Invalid Requisition'}, status=status.HTTP_200_OK)
         except:
             return Response({'Invalid Requisition'}, status=status.HTTP_400_BAD_REQUEST)
         
