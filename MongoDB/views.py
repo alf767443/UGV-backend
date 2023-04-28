@@ -56,27 +56,19 @@ class NanConverter(json.JSONEncoder):
 @csrf_exempt
 def chart(request, query=''):
     print(request)
-    # print(JSONParser().parse(request))
     if  request.method=='GET':
         try:
             name = request.GET.get('name','')
-            # print(request.GET.get)
-            
-            # raw=JSONParser().parse(request)
-            # print(raw)
-            # name = raw['name']
-            # print(1)
+            print(name)
             result = MongoClient.RemoteUnitClient['CeDRI_UGV_dashboard']['graphs'].find_one(filter={'name': name})
             print(result)
             query = result['query'] 
             print(query)
             result = json.loads(json.dumps(list(Client[query['database']][query['collection']].aggregate(pipeline=query['pipeline'])), cls=NanConverter, allow_nan=False))   
-            # print(1)
             return JsonResponse(result,safe=False)
-            # return Response({'Invalid Requisition'}, status=status.HTTP_200_OK)
-        except:
+        except Exception as e:
+            print(e)
             return JsonResponse({},safe=False)
-            # return Response({'Invalid Requisition'}, status=status.HTTP_400_BAD_REQUEST)
         
 
 @csrf_exempt
