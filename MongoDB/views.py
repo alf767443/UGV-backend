@@ -114,13 +114,11 @@ def robot(request, query=''):
         try:
             name = request.GET.get('name','')
             print(name)
-            result = json.loads(json.dumps(list(MDBchart.find({'name': name})), cls=NanConverter, allow_nan=False))   
-            print(result)
-            # query = result['query'] 
-            # database = query['database']
-            # collection = query['collection']
-            # pipeline = query['pipeline']
-            # result = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
+            if name == '':
+                result = json.loads(json.dumps(list(MDBchart.find({})), cls=NanConverter, allow_nan=False))   
+                print(result)
+            else:
+                result = json.loads(json.dumps(list(MDBchart.find({'name': name})), cls=NanConverter, allow_nan=False))   
             return JsonResponse(result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
