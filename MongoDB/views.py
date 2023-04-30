@@ -119,6 +119,7 @@ def robot(request, query=''):
                 print(result)
             else:
                 result = json.loads(json.dumps(list(MDBchart.find({'name': name})), cls=NanConverter, allow_nan=False))   
+                print(result)
             return JsonResponse(result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
