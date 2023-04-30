@@ -112,11 +112,10 @@ def robot(request, query=''):
     MDBchart =  Client['CeDRI_dashboard']['robots']
     if  request.method =='GET':
         try:
-            print(request)
-            result = {}
-            # name = request.GET.get('name','')
-            # result = MDBchart.find({'name': name}})
-
+            name = request.GET.get('name','')
+            print(name)
+            result = json.loads(json.dumps(list(MDBchart.find({'name': name})), cls=NanConverter, allow_nan=False))   
+            print(result)
             # query = result['query'] 
             # database = query['database']
             # collection = query['collection']
