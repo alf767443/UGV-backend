@@ -64,7 +64,7 @@ def chart(request, query=''):
             database = query['database']
             collection = query['collection']
             pipeline = query['pipeline']
-            option = query['option']
+            option = result['option']
             data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
             result = {'data': data, 'option': option }
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
