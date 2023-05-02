@@ -163,7 +163,7 @@ def robot(request, query=''):
             filter = {
                 'robot': raw['robot']
             }
-            result = json.loads(json.dumps(list(MDBchart.find(filter=filter))))
+            result = json.loads(json.dumps(list(MDBchart.find(filter=filter, projection={'robot': 1}))))
             if filter['robot'] == result['robot'] and filter['password'] == result['password']:
                 return JsonResponse(data=raw,safe=False, status=status.HTTP_202_ACCEPTED)
             else:
