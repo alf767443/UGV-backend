@@ -161,7 +161,7 @@ def robot(request, query=''):
         try:
             raw=JSONParser().parse(request)
             print(raw)
-            
+            return JsonResponse(data=raw,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
     else:
