@@ -165,7 +165,7 @@ def robot(request, query=''):
             }
             result = MDBchart.find_one(filter=filter, projection={'robot': 1, 'password': 1})
             if raw['robot'] == result['robot'] and raw['password'] == result['password']:
-                return JsonResponse(data={'_id': raw['id']},safe=False, status=status.HTTP_202_ACCEPTED)
+                return JsonResponse(data={'_id': raw['_id']},safe=False, status=status.HTTP_202_ACCEPTED)
             else:
                 return JsonResponse(data={},safe=False, status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
