@@ -167,26 +167,6 @@ def robot(request, query=''):
     else:
         return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-# Robots requests
-@csrf_exempt
-def robot(request, query=''):
-    MDBchart =  Client['CeDRI_dashboard']['robots']
-    if request.method == 'POST':
-        try:
-            raw=JSONParser().parse(request)
-
-            result = MDBchart.insert_one(raw).inserted_id
-            update = {'$set': {'name': str(result)}}
-            filter = {'_id':  bson.ObjectId(result)}
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
-            return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-
-
 @csrf_exempt
 def query(request,query=''):
     if  request.method=='POST':
