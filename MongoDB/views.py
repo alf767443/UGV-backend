@@ -160,8 +160,9 @@ def robot(request, query=''):
     elif request.method == 'OPTIONS':
         try:
             raw=JSONParser().parse(request)
+            print(raw)
             filter = {
-                'name': raw['name']
+                'robot': raw['name']
             }
             print(filter)
             result = json.loads(json.dumps(list(MDBchart.find(filter=filter))))
