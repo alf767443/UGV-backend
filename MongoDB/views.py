@@ -163,7 +163,7 @@ def robot(request, query=''):
             filter = {
                 'robot': raw['robot']
             }
-            result = MongoClient.MDBchart['CeDRI_dashboard']['robots'].find_one(filter={'robot': 'bigCeDRI'}, projection={'robot': 1})
+            result = MongoClient.MDBchart.find_one(filter={'robot': 'bigCeDRI'}, projection={'robot': 1})
             if filter['robot'] == result['robot'] and filter['password'] == result['password']:
                 return JsonResponse(data=raw,safe=False, status=status.HTTP_202_ACCEPTED)
             else:
