@@ -160,7 +160,10 @@ def robot(request, query=''):
     elif request.method == 'OPTIONS':
         try:
             raw=JSONParser().parse(request)
-            print(raw)
+            filter = {
+                'name': raw['name']
+            }
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
             return JsonResponse(data=raw,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
