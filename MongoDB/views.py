@@ -160,10 +160,13 @@ def robot(request, query=''):
     elif request.method == 'OPTIONS':
         try:
             raw=JSONParser().parse(request)
+            print(raw)
             filter = {
                 'robot': raw['robot']
             }
-            result = MongoClient.MDBchart.find_one(filter={'robot': 'bigCeDRI'}, projection={'robot': 1})
+            print(filter)
+            result = MDBchart.find_one(filter={'robot': 'bigCeDRI'}, projection={'robot': 1})
+            print(result)
             if filter['robot'] == result['robot'] and filter['password'] == result['password']:
                 return JsonResponse(data=raw,safe=False, status=status.HTTP_202_ACCEPTED)
             else:
