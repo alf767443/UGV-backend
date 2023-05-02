@@ -160,10 +160,13 @@ def robot(request, query=''):
     elif request.method == 'OPTIONS':
         try:
             raw=JSONParser().parse(request)
+            print(raw)
             filter = {
                 'robot': raw['robot']
             }
+            print(filter)
             result = MDBchart.find_one(filter=filter, projection={'robot': 1, 'password': 1})
+            print(result)
             if raw['robot'] == result['robot'] and raw['password'] == result['password']:
                 return JsonResponse(data={'_id': result['_id']},safe=False, status=status.HTTP_202_ACCEPTED)
             else:
