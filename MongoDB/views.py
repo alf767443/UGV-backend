@@ -169,7 +169,7 @@ def robot(request, query=''):
             else:
                 return JsonResponse(data={},safe=False, status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
-            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_406_NOT_ACCEPTABLE)
     else:
         return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
