@@ -58,24 +58,16 @@ def chart(request, query=''):
     MDBchart =  Client['CeDRI_dashboard']['charts']
     if  request.method =='GET':
         try:
-            info = request.GET.get('info','')
-            if(info == "chart"):
-                name = request.GET.get('name','')
-                result = MDBchart.find_one(filter={'name': name})
-                query = result['query'] 
-                database = query['database']
-                collection = query['collection']
-                pipeline = query['pipeline']
-                option = result['option']
-                tile = result['tile']
-                data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
-                result = {'data': data, 'option': option, 'tile': tile}
-            if(info == "list"):
-                filter =  json.loads(json.dumps(request.GET.get('robot',''), cls=NanConverter, allow_nan=False))  
-                projection =  json.loads(json.dumps(request.GET.get('proj',''), cls=NanConverter, allow_nan=False))  
-                result = json.loads(json.dumps(list(MDBchart.find(filter=filter,projection=projection)), cls=NanConverter, allow_nan=False))  
-            else:
-                result={}
+            name = request.GET.get('name','')
+            result = MDBchart.find_one(filter={'name': name})
+            query = result['query'] 
+            database = query['database']
+            collection = query['collection']
+            pipeline = query['pipeline']
+            option = result['option']
+            tile = result['tile']
+            data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
+            result = {'data': data, 'option': option, 'tile': tile}
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
