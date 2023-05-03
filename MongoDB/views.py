@@ -58,9 +58,9 @@ def chart(request, query=''):
     MDBchart =  Client['CeDRI_dashboard']['charts']
     if  request.method =='GET':
         try:
+            info = request.GET.get('info','')
             if(info == 'chart'):
                 name = request.GET.get('name','')
-                info = request.GET.get('info','')
                 result = MDBchart.find_one(filter={'name': name})
                 query = result['query'] 
                 database = query['database']
