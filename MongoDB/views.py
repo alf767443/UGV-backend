@@ -59,7 +59,7 @@ def chart(request, query=''):
     if  request.method =='GET':
         try:
             info = request.GET.get('info','')
-            if(info == 'chart'):
+            if(info == "chart"):
                 name = request.GET.get('name','')
                 result = MDBchart.find_one(filter={'name': name})
                 query = result['query'] 
@@ -70,7 +70,7 @@ def chart(request, query=''):
                 tile = result['tile']
                 data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
                 result = {'data': data, 'option': option, 'tile': tile}
-            if(info == 'list'):
+            if(info == "list"):
                 filter =  json.loads(json.dumps(request.GET.get('robot',''), cls=NanConverter, allow_nan=False))  
                 projection =  json.loads(json.dumps(request.GET.get('proj',''), cls=NanConverter, allow_nan=False))  
                 result = json.loads(json.dumps(list(MDBchart.find(filter=filter,projection=projection)), cls=NanConverter, allow_nan=False))  
