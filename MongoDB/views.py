@@ -67,7 +67,7 @@ def chart(request, query=''):
             option = result['option']
             tile = result['tile']
             data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
-            result = {'data': data, 'option': option, 'tile': tile}
+            result = {'data': data, 'option': option, 'tile': tile, 'query': query}
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
@@ -83,7 +83,6 @@ def chart(request, query=''):
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
-
     elif request.method == 'PUT':
         try:
             raw=JSONParser().parse(request)
