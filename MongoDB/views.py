@@ -65,8 +65,9 @@ def chart(request, query=''):
             collection = query['collection']
             pipeline = query['pipeline']
             option = result['option']
+            tile = result['tile']
             data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
-            result = {'data': data, 'option': option }
+            result = {'data': data, 'option': option, 'tile': tile}
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
