@@ -59,6 +59,8 @@ def chart(request, query=''):
     if  request.method =='GET':
         try:
             name = request.GET.get('name','')
+            info = request.GET.get('info','')
+            print(info)
             result = MDBchart.find_one(filter={'name': name})
             query = result['query'] 
             database = query['database']
