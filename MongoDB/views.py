@@ -140,9 +140,13 @@ def robot(request, query=''):
     elif request.method == 'PUT':
         try:
             raw=JSONParser().parse(request)
+            print(raw)
             filter = raw['filter']
+            print(filter)
             update = raw['update']
+            print(update)
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
