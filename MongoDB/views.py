@@ -66,7 +66,7 @@ def chart(request, query=''):
             pipeline = query['pipeline']
             option = result['option']
             tile = result['tile']
-            data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))   
+            data = json.loads(json.dumps(list(Client[database][collection].aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False)) 
             result = {'data': data, 'option': option, 'tile': tile, 'query': query}
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
@@ -78,7 +78,7 @@ def chart(request, query=''):
             result = MDBchart.insert_one(raw).inserted_id
             update = {'$set': {'name': str(result)}}
             filter = {'_id':  bson.ObjectId(result)}
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
@@ -88,7 +88,7 @@ def chart(request, query=''):
             raw=JSONParser().parse(request)
             filter = raw['filter']
             update = raw['update']
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
@@ -99,7 +99,7 @@ def chart(request, query=''):
             raw=JSONParser().parse(request)
             print(raw)
             filter = raw['filter']
-            result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter))))
+            result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
         except Exception as e:
