@@ -86,34 +86,25 @@ def chart(request, query=''):
     elif request.method == 'PUT':
         try:
             raw=JSONParser().parse(request)
-            print(raw)
             filter = raw['filter']
-            print(filter)
             update = raw['update']
-            print(update)
             result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
-            print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'DELETE':
         try:
-            print(request)
             raw=JSONParser().parse(request)
-            print(raw)
             filter = raw['filter']
             result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter)), cls=NanConverter, allow_nan=False))
-            print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'OPTIONS':
         try:
-            print(request)
             raw=JSONParser().parse(request)
-            print(raw)
             filter = raw['filter']
             projection = raw['projection']
             result = json.loads(json.dumps(list(MDBchart.find(filter=filter, projection=projection)), cls=NanConverter, allow_nan=False))
