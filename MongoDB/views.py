@@ -117,11 +117,12 @@ def chart(request, query=''):
             filter = {
                 'robot': raw['robot']
             }
-            result = MDBchart.find_one(filter=filter, projection={'robot': 1, 'password': 1, 'name': 1})
-            if raw['robot'] == result['robot'] and raw['password'] == result['password']:
-                return JsonResponse(data={'name': result['name']},safe=False, status=status.HTTP_202_ACCEPTED)
-            else:
-                return JsonResponse(data={},safe=False, status=status.HTTP_406_NOT_ACCEPTABLE)
+            projection = raw['projection']
+            result = json.loads(json.dumps(list(MDBchart.find(filter=filter, projection=projection)), cls=NanConverter, allow_nan=False))
+            # if raw['robot'] == result['robot'] and raw['password'] == result['password']:
+            return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+            # else:
+                # return JsonResponse(data={},safe=False, status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
     
