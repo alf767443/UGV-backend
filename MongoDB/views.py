@@ -91,7 +91,7 @@ def chart(request, query=''):
             print(filter)
             update = raw['update']
             print(update)
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
@@ -106,6 +106,22 @@ def chart(request, query=''):
             result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+        
+    elif request.method == 'OPTIONS':
+        try:
+            print(request)
+            raw=JSONParser().parse(request)
+            print(raw)
+            filter = {
+                'robot': raw['robot']
+            }
+            result = MDBchart.find_one(filter=filter, projection={'robot': 1, 'password': 1, 'name': 1})
+            if raw['robot'] == result['robot'] and raw['password'] == result['password']:
+                return JsonResponse(data={'name': result['name']},safe=False, status=status.HTTP_202_ACCEPTED)
+            else:
+                return JsonResponse(data={},safe=False, status=status.HTTP_406_NOT_ACCEPTABLE)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
     
@@ -136,7 +152,7 @@ def robot(request, query=''):
             result = MDBchart.insert_one(raw).inserted_id
             update = {'$set': {'name': str(result)}}
             filter = {'_id':  bson.ObjectId(result)}
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
@@ -149,7 +165,7 @@ def robot(request, query=''):
             print(filter)
             update = raw['update']
             print(update)
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update))))
+            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
@@ -161,7 +177,7 @@ def robot(request, query=''):
             raw=JSONParser().parse(request)
             print(raw)
             filter = raw['filter']
-            result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter))))
+            result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
         except Exception as e:
