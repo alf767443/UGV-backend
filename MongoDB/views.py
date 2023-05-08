@@ -114,9 +114,7 @@ def chart(request, query=''):
             print(request)
             raw=JSONParser().parse(request)
             print(raw)
-            filter = {
-                'robot': raw['robot']
-            }
+            filter = raw['filter']
             projection = raw['projection']
             result = json.loads(json.dumps(list(MDBchart.find(filter=filter, projection=projection)), cls=NanConverter, allow_nan=False))
             # if raw['robot'] == result['robot'] and raw['password'] == result['password']:
