@@ -106,8 +106,8 @@ def chart(request, query=''):
         try:
             raw=JSONParser().parse(request)
             print(raw)
-            filter = raw['pipeline']
-            print(filter)
+            pipeline = raw['pipeline']
+            print(pipeline)
             result = json.loads(json.dumps(list(MDBchart.aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
