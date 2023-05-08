@@ -105,9 +105,8 @@ def chart(request, query=''):
     elif request.method == 'OPTIONS':
         try:
             raw=JSONParser().parse(request)
-            filter = raw['filter']
-            projection = raw['projection']
-            result = json.loads(json.dumps(list(MDBchart.find(filter=filter, projection=projection)), cls=NanConverter, allow_nan=False))
+            filter = raw['pipeline']
+            result = json.loads(json.dumps(list(MDBchart.aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
