@@ -129,7 +129,7 @@ def robot(request, query=''):
                 result = json.loads(json.dumps(list(MDBchart.find({})), cls=NanConverter, allow_nan=False))   
                 print(result)
             else:
-                result = json.loads(json.dumps(list(MDBchart.find({'name': name})), cls=NanConverter, allow_nan=False))   
+                result = json.loads(json.dumps(list(MDBchart.find_one({'name': name})), cls=NanConverter, allow_nan=False))   
                 print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:
