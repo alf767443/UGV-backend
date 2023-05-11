@@ -148,6 +148,7 @@ def robot(request, query=''):
         
     elif request.method == 'PUT':
         try:
+            print(request)
             raw=JSONParser().parse(request)
             print(raw)
             filter = raw['filter']
