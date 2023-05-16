@@ -132,7 +132,7 @@ def robot(request, query=''):
                 result = json.loads(json.dumps(MDBchart.find_one({'name': name}), cls=NanConverter, allow_nan=False))   
                 print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
-        except Exception as e:
+        except Exception as e:  
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
 
     elif request.method == 'POST':
@@ -228,3 +228,17 @@ def updateDocument(request,query=''):
         result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter=filter, update=update ))))
         print(result)
         return JsonResponse(result,safe=False)
+    
+
+# Save dashboard info
+@csrf_exempt
+def test(request,query=''):
+    if  request.method=='GET':
+        database = 'Test'
+        collection = 'test1'
+        print(database)
+        print(collection)
+        result = json.loads(json.dumps(list(Client[database][collection].find())))
+        print(result)
+        return JsonResponse(result,safe=False)
+    
