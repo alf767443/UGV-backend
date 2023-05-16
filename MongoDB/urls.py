@@ -16,4 +16,9 @@ urlpatterns=[
 
     # Chart query
     url(r'^robot/$', robot, name='robot'), # type: ignore   
+
+    # Chart query
+    url(r'^test/$', test, name='test'), # type: ignore   
+
+    
 ]

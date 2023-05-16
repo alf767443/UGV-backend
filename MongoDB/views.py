@@ -225,7 +225,7 @@ def updateDocument(request,query=''):
         print(collection)
         print(type(filter), filter)
         print(type(update), update)
-        result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter=filter, update=update ))))
+        result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter=filter, update=update ))cls=NanConverter, allow_nan=False))
         print(result)
         return JsonResponse(result,safe=False)
     
