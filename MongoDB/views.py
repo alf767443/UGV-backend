@@ -234,11 +234,18 @@ def updateDocument(request,query=''):
 @csrf_exempt
 def test(request,query=''):
     if  request.method=='GET':
+        freq = request.GET.get('freq','')
         database = 'Test'
         collection = 'test1'
         print(database)
         print(collection)
-        result = json.loads(json.dumps(list(Client[database][collection].find())))
+
+        _temp = list(Client[database][collection].find({'freqCard': {'$gt': freq}}))
+        if len(_temp):
+            result = {'action': 'Levantar'} 
+        else:
+            result = {'action': 'Nada a fazer'} 
+
         print(result)
         return JsonResponse(result,safe=False)
     
