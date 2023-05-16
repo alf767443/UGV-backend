@@ -236,7 +236,7 @@ def test(request,query=''):
     if  request.method=='GET':
         freq = request.GET.get('freq','')
         print(freq)
-        database = 'Test'
+        database = 'Teste'
         collection = 'test1'
         print(database)
         print(collection)
