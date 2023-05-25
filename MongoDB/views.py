@@ -244,10 +244,22 @@ def script(request, query=''):
                 return JsonResponse(data=result,safe=False, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'OPTIONS':
+        try:
+            raw=JSONParser().parse(request)
+            print(raw)
+            pipeline = raw['pipeline']
+            print(pipeline)
+            result = json.loads(json.dumps(list(LocalCollection.aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))
+            print(result)
+            return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
     
     else:
         return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
+       
 
 
 
