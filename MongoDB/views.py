@@ -95,10 +95,12 @@ def chart(request, query=''):
         
     elif request.method == 'DELETE':
         try:
-            raw=JSONParser().parse(request)
-            filter = raw['filter']
-            result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter)), cls=NanConverter, allow_nan=False))
-            return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+            name = request.GET.get('name','')
+            result = MDBchart.delete_one(filter={'name': name}).acknowledged
+            if result:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+            else:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
