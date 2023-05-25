@@ -241,7 +241,7 @@ def test(request,query=''):
         print(database)
         print(collection)
 
-        _temp = list(Client[database][collection].find({'freqCard': {'$gt': int(freq)}}))
+        _temp = list(Client['Teste']['test1'].find({'freqCard': {'$gt': 100}}))
         print(_temp)
         if len(_temp):
             result = {'action': 'Levantar'} 
