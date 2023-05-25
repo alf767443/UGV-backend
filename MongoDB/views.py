@@ -55,11 +55,11 @@ class NanConverter(json.JSONEncoder):
 # Chart requests
 @csrf_exempt
 def chart(request, query=''):
-    MDBchart =  Client['CeDRI_dashboard']['charts']
+    LocalCollection =  Client['CeDRI_dashboard']['charts']
     if  request.method =='GET':
         try:
             name = request.GET.get('name','')
-            result = MDBchart.find_one(filter={'name': name})
+            result = LocalCollection.find_one(filter={'name': name})
             query = result['query'] 
             database = query['database']
             collection = query['collection']
@@ -75,10 +75,10 @@ def chart(request, query=''):
     elif request.method == 'POST':
         try:
             raw=JSONParser().parse(request)
-            result = MDBchart.insert_one(raw).inserted_id
+            result = LocalCollection.insert_one(raw).inserted_id
             update = {'$set': {'name': str(result)}}
             filter = {'_id':  bson.ObjectId(result)}
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
@@ -88,7 +88,7 @@ def chart(request, query=''):
             raw=JSONParser().parse(request)
             filter = raw['filter']
             update = raw['update']
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
@@ -96,7 +96,7 @@ def chart(request, query=''):
     elif request.method == 'DELETE':
         try:
             name = request.GET.get('name','')
-            result = MDBchart.delete_one(filter={'name': name}).acknowledged
+            result = LocalCollection.delete_one(filter={'name': name}).acknowledged
             if result:
                 return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
             else:
@@ -110,7 +110,7 @@ def chart(request, query=''):
             print(raw)
             pipeline = raw['pipeline']
             print(pipeline)
-            result = json.loads(json.dumps(list(MDBchart.aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))
+            result = json.loads(json.dumps(list(LocalCollection.aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
@@ -122,16 +122,16 @@ def chart(request, query=''):
 # Robots requests
 @csrf_exempt
 def robot(request, query=''):
-    MDBchart =  Client['CeDRI_dashboard']['robots']
+    LocalCollection =  Client['CeDRI_dashboard']['robots']
     if  request.method =='GET':
         try:
             name = request.GET.get('name','')
             print(name)
             if name == '':
-                result = json.loads(json.dumps(list(MDBchart.find({})), cls=NanConverter, allow_nan=False))   
+                result = json.loads(json.dumps(list(LocalCollection.find({})), cls=NanConverter, allow_nan=False))   
                 print(result)
             else:
-                result = json.loads(json.dumps(MDBchart.find_one({'name': name}), cls=NanConverter, allow_nan=False))   
+                result = json.loads(json.dumps(LocalCollection.find_one({'name': name}), cls=NanConverter, allow_nan=False))   
                 print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:  
@@ -140,10 +140,10 @@ def robot(request, query=''):
     elif request.method == 'POST':
         try:
             raw=JSONParser().parse(request)
-            result = MDBchart.insert_one(raw).inserted_id
+            result = LocalCollection.insert_one(raw).inserted_id
             update = {'$set': {'name': str(result)}}
             filter = {'_id':  bson.ObjectId(result)}
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
@@ -157,7 +157,7 @@ def robot(request, query=''):
             print(filter)
             update = raw['update']
             print(update)
-            result = json.loads(json.dumps(list(MDBchart.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:
@@ -165,13 +165,12 @@ def robot(request, query=''):
         
     elif request.method == 'DELETE':
         try:
-            print(request)
-            raw=JSONParser().parse(request)
-            print(raw)
-            filter = raw['filter']
-            result = json.loads(json.dumps(list(MDBchart.delete_one(upsert=True, filter=filter)), cls=NanConverter, allow_nan=False))
-            print(result)
-            return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+            name = request.GET.get('name','')
+            result = LocalCollection.delete_one(filter={'name': name}).acknowledged
+            if result:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+            else:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
     
@@ -181,7 +180,7 @@ def robot(request, query=''):
             filter = {
                 'robot': raw['robot']
             }
-            result = MDBchart.find_one(filter=filter, projection={'robot': 1, 'password': 1, 'name': 1})
+            result = LocalCollection.find_one(filter=filter, projection={'robot': 1, 'password': 1, 'name': 1})
             if raw['robot'] == result['robot'] and raw['password'] == result['password']:
                 return JsonResponse(data={'name': result['name']},safe=False, status=status.HTTP_202_ACCEPTED)
             else:
@@ -190,6 +189,68 @@ def robot(request, query=''):
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
     else:
         return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+# Robots requests
+@csrf_exempt
+def script(request, query=''):
+    LocalCollection =  Client['CeDRI_dashboard']['scripts']
+    if  request.method =='GET':
+        try:
+            name = request.GET.get('name','')
+            print(name)
+            if name == '':
+                result = json.loads(json.dumps(list(LocalCollection.find({})), cls=NanConverter, allow_nan=False))   
+                print(result)
+            else:
+                result = json.loads(json.dumps(LocalCollection.find_one({'name': name}), cls=NanConverter, allow_nan=False))   
+                print(result)
+            return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
+        except Exception as e:  
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
+
+    elif request.method == 'POST':
+        try:
+            raw=JSONParser().parse(request)
+            result = LocalCollection.insert_one(raw).inserted_id
+            update = {'$set': {'name': str(result)}}
+            filter = {'_id':  bson.ObjectId(result)}
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+        
+    elif request.method == 'PUT':
+        try:
+            print(request)
+            raw=JSONParser().parse(request)
+            print(raw)
+            filter = raw['filter']
+            print(filter)
+            update = raw['update']
+            print(update)
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            print(result)
+            return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+        
+    elif request.method == 'DELETE':
+        try:
+            name = request.GET.get('name','')
+            result = LocalCollection.delete_one(filter={'name': name}).acknowledged
+            if result:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+            else:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+    
+    else:
+        return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+
+
 
 @csrf_exempt
 def query(request,query=''):
@@ -228,28 +289,6 @@ def updateDocument(request,query=''):
         print(type(filter), filter)
         print(type(update), update)
         result = json.loads(json.dumps(list(Client[database][collection].find_one_and_update(upsert=True, filter=filter, update=update )),cls=NanConverter, allow_nan=False))
-        print(result)
-        return JsonResponse(result,safe=False)
-    
-
-# Save dashboard info
-@csrf_exempt
-def test(request,query=''):
-    if  request.method=='GET':
-        freq = request.GET.get('freq','')
-        print(freq)
-        database = 'Teste'
-        collection = 'test1'
-        print(database)
-        print(collection)
-
-        _temp = list(Client['Teste']['test1'].find({'freqCard': {'$gt': 100}}))
-        print(_temp)
-        if len(_temp):
-            result = {'action': 'Levantar'} 
-        else:
-            result = {'action': 'Nada a fazer'} 
-
         print(result)
         return JsonResponse(result,safe=False)
     
