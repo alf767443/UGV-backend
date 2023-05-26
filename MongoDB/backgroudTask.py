@@ -149,18 +149,3 @@ def stopThread(metaCode):
     for thread in _threads:
         thread['thread'].join()
 
-def backgroudTask():
-    while True:
-        cleanThreads()
-        codes = list(Scripts.find(filter={}))
-        for code in codes:
-            try:
-                if(code['status'] == 'stop' or code['status'] == 'error'):
-                    stopThread(metaCode=code)
-                if datetime.datetime.now() > code['next'] and code['status'] == 'wait':
-                    nextExec(metaCode=code)
-                    runCodeAsync(metaCode=code)
-            except Exception as e:
-                log(robot=code['name'], msg=e,type='error')
-                statusExec(metaCode=code, status='error')
-        time.sleep(nextSleep())
