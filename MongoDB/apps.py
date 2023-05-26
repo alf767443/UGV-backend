@@ -11,7 +11,7 @@ class MongodbConfig(AppConfig):
 
 class BackgroundTaskConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'backgroudTask'
+    name = 'BackgroundTask'
 
     def ready(self):
         # Crie uma thread e inicie-a
