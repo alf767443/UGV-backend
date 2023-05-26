@@ -5,15 +5,11 @@ from django.http.response import JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
-
-
 from pymongo import MongoClient
-
 from django.core.files.storage import default_storage
-
-import bson, datetime, json, math, numpy
-
-import time
+import bson, datetime, json, math, numpy, time, threading
+from django.shortcuts import render
+from .task import execute_background_task
 
 Client = MongoClient('mongodb://localhost:27017/')
 
@@ -51,6 +47,14 @@ class NanConverter(json.JSONEncoder):
     def iterencode(self, obj, *args, **kwargs):
         obj = nan2None(obj)
         return super().iterencode(obj, *args, **kwargs)
+
+# Background task
+def backgroud(request):
+    thread = threading.Thread(target=execute_background_task)
+    thread.daemon = True  # Define a thread como daemon para que ela seja encerrada quando o programa principal (servidor Django) terminar
+    thread.start()
+    return render(request, 'myapp/my_template.html')
+
 
 # Chart requests
 @csrf_exempt
