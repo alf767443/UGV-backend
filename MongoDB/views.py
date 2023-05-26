@@ -273,7 +273,7 @@ def log(request, query=''):
                 result = json.loads(json.dumps(list(LocalCollection.find({})), cls=NanConverter, allow_nan=False))   
                 print(result)
             else:
-                result = json.loads(json.dumps(LocalCollection.find_one({'script': name}), cls=NanConverter, allow_nan=False))   
+                result = json.loads(json.dumps(list(LocalCollection.find({'script': name})), cls=NanConverter, allow_nan=False))   
                 print(result)
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:  
