@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from background_task import background
+# from background_task import background
 from .backgroudTask import *  # Importe a função backgroudTask do seu arquivo
 
-@background(schedule=10)  # Defina o tempo de espera desejado em segundos
 def execute_background_task():
     while True:
         cleanThreads()
