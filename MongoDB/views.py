@@ -261,6 +261,77 @@ def script(request, query=''):
         return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
        
 
+# Robots requests
+@csrf_exempt
+def log(request, query=''):
+    LocalCollection =  Client['CeDRI_dashboard']['logs']
+    if  request.method =='GET':
+        try:
+            name = request.GET.get('name','')
+            print(name)
+            if name == '':
+                result = json.loads(json.dumps(list(LocalCollection.find({})), cls=NanConverter, allow_nan=False))   
+                print(result)
+            else:
+                result = json.loads(json.dumps(LocalCollection.find_one({'name': name}), cls=NanConverter, allow_nan=False))   
+                print(result)
+            return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
+        except Exception as e:  
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
+
+    elif request.method == 'POST':
+        try:
+            raw=JSONParser().parse(request)
+            result = LocalCollection.insert_one(raw).inserted_id
+            update = {'$set': {'name': str(result)}}
+            filter = {'_id':  bson.ObjectId(result)}
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+        
+    elif request.method == 'PUT':
+        try:
+            print(request)
+            raw=JSONParser().parse(request)
+            print(raw)
+            filter = raw['filter']
+            print(filter)
+            update = raw['update']
+            print(update)
+            result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
+            print(result)
+            return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+        
+    elif request.method == 'DELETE':
+        try:
+            name = request.GET.get('name','')
+            result = LocalCollection.delete_one(filter={'name': name}).acknowledged
+            if result:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_301_MOVED_PERMANENTLY)
+            else:
+                return JsonResponse(data=result,safe=False, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'OPTIONS':
+        try:
+            raw=JSONParser().parse(request)
+            print(raw)
+            pipeline = raw['pipeline']
+            print(pipeline)
+            result = json.loads(json.dumps(list(LocalCollection.aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))
+            print(result)
+            return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
+    
+    else:
+        return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+       
+
 
 
 

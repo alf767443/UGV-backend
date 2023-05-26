@@ -18,5 +18,8 @@ urlpatterns=[
     url(r'^robot/$', robot, name='robot'), # type: ignore   
 
     # Robot query
-    url(r'^script/$', script, name='robot'), # type: ignore       
+    url(r'^script/$', script, name='robot'), # type: ignore  
+    
+    # Robot query
+    url(r'^log/$', log, name='robot'), # type: ignore       
 ]
