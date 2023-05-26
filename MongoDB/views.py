@@ -10,7 +10,6 @@ from rest_framework.renderers import JSONRenderer
 from pymongo import MongoClient
 from django.core.files.storage import default_storage
 import bson, datetime, json, math, numpy, time, threading
-from .task import execute_background_task
 
 Client = MongoClient('mongodb://localhost:27017/')
 

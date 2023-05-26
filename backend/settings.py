@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_mongoengine',
     'corsheaders',
     'MongoDB.apps.MongodbConfig',
+    'MongoDB.apps.BackgroundTaskConfig',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
