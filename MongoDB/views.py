@@ -287,7 +287,7 @@ def log(request, query=''):
         try:
             raw=JSONParser().parse(request)
             result = LocalCollection.insert_one(raw).inserted_id
-            update = {'$set': {'name': str(result)}}
+            update = {'$set': {'datetime': datetime.datetime.now()}}
             filter = {'_id':  bson.ObjectId(result)}
             result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
             return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
