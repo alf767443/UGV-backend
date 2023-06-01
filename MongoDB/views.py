@@ -219,7 +219,7 @@ def script(request, query=''):
             result = LocalCollection.insert_one(raw).inserted_id
             log = {
                 'script': str(result),
-                'robot': raw['robot'],
+                'robot': str(raw['robot']),
                 'msg': 'Script is created',
                 'type': 'debug',
                 'datetime': _now
