@@ -214,12 +214,21 @@ def script(request, query=''):
 
     elif request.method == 'POST':
         try:
+            _now = datetime.datetime.now()
             raw=JSONParser().parse(request)
             result = LocalCollection.insert_one(raw).inserted_id
-            update = {'$set': {'name': str(result), 'next': datetime.datetime.now(), 'last': datetime.datetime.now()}}
+            update = {'$set': {'name': str(result), 'next': _now, 'last': _now}}
             filter = {'_id':  bson.ObjectId(result)}
             result = json.loads(json.dumps(list(LocalCollection.find_one_and_update(upsert=True, filter=filter, update=update)), cls=NanConverter, allow_nan=False))
-            return JsonResponse(data=result,safe=False, status=status.HTTP_201_CREATED)
+            log = {
+                'script': result,
+                'robot': raw['robot'],
+                'msg': 'Script is created',
+                'type': 'debug',
+                'datetime': _now
+            }
+            _result = Client['CeDRI_dashboard']['logs'].insert_one(log).inserted_id
+            return JsonResponse(data=[result, _result],safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
