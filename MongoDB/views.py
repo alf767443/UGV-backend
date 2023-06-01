@@ -228,7 +228,7 @@ def script(request, query=''):
                 'datetime': _now
             }
             _result = Client['CeDRI_dashboard']['logs'].insert_one(log).inserted_id
-            return JsonResponse(data=[result, _result],safe=False, status=status.HTTP_201_CREATED)
+            return JsonResponse(data={'scipt':result, 'log':_result},safe=False, status=status.HTTP_201_CREATED)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         
