@@ -218,7 +218,7 @@ def script(request, query=''):
             raw=JSONParser().parse(request)
             result = LocalCollection.insert_one(raw).inserted_id
             log = {
-                'script': result,
+                'script': str(result),
                 'robot': raw['robot'],
                 'msg': 'Script is created',
                 'type': 'debug',
