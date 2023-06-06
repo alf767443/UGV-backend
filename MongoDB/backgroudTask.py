@@ -98,7 +98,7 @@ def runCode(metaCode):
         if Scripts.find_one(filter={'name': metaCode['name']})['status'] == 'run':
             statusExec(metaCode=metaCode, status='wait')
     except Exception as e:
-        log(robot=robot, msg=e,type='error')
+        log(robot=robot, msg=e,type='error', script=_id)
         statusExec(metaCode=metaCode, status='error', script=_id)
 
 def nextSleep(max = 10):
