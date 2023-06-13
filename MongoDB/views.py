@@ -355,11 +355,16 @@ def database(request, query=''):
             lastInputs = request.GET.get('n','')
             print([database, collection, lastInputs])
             if not database == '' and collection == '':
+                print(1)
                 result = Client[database].list_collection_names()
             elif not database == '' and not collection == '' and not lastInputs == '':
+                print(2)
                 lastInputs = int(lastInputs)
                 result = Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)])
-                return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
+
+            return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
         except Exception as e:  
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
     else:
