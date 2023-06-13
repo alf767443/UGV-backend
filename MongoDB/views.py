@@ -353,6 +353,7 @@ def database(request, query=''):
             database = request.GET.get('db','')
             collection = request.GET.get('coll','')
             lastInputs = request.GET.get('n','')
+            print([database, collection, lastInputs])
             if not database == '' and collection == '':
                 result = Client[database].list_collection_names()
             elif not database == '' and not collection == '' and not lastInputs == '':
