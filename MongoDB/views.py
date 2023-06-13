@@ -345,6 +345,25 @@ def log(request, query=''):
         return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
        
 
+# Databases requests
+@csrf_exempt
+def database(request, query=''):
+    if  request.method =='GET':
+        try:
+            database = request.GET.get('db','')
+            collection = request.GET.get('coll','')
+            lastInputs = request.GET.get('n','')
+            if not database == '' and collection == '':
+                result = Client[database].list_collection_names()
+            elif not database == '' and not collection == '' and not lastInputs == '':
+                lastInputs = int(lastInputs)
+                result = Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)])
+                return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+        except Exception as e:  
+            return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
+    else:
+        return JsonResponse({'data': 'Method not allowed'},safe=False, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+   
 
 
 
