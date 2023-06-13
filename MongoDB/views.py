@@ -363,6 +363,7 @@ def database(request, query=''):
                 print([database, collection, lastInputs])
                 print(Client[database][collection].count_documents(filter={}))
                 print(Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)]))
+                result = json.loads(json.dumps(list(Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)])), cls=NanConverter, allow_nan=False))
             else:
                 return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
 
