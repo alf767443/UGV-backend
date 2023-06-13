@@ -26,5 +26,5 @@ urlpatterns=[
     url(r'^log/$', log, name='robot'), # type: ignore     
 
     # Database query
-    url(r'^db/$', database, name='robot'), # type: ignore     
+    url(r'^database/$', database, name='robot'), # type: ignore     
 ]
