@@ -353,16 +353,10 @@ def database(request, query=''):
             database = request.GET.get('db','')
             collection = request.GET.get('coll','')
             lastInputs = request.GET.get('n','')
-            print([database, collection, lastInputs])
             if not database == '' and collection == '':
-                print(1)
                 result = Client[database].list_collection_names()
             elif not database == '' and not collection == '' and not lastInputs == '':
-                print(2)
                 lastInputs = int(lastInputs)
-                print([database, collection, lastInputs])
-                print(Client[database][collection].count_documents(filter={}))
-                print(Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)]))
                 result = json.loads(json.dumps(list(Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)])), cls=NanConverter, allow_nan=False))
             else:
                 return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
