@@ -360,6 +360,8 @@ def database(request, query=''):
             elif not database == '' and not collection == '' and not lastInputs == '':
                 print(2)
                 lastInputs = int(lastInputs)
+                print([database, collection, lastInputs])
+                print(Client[database][collection].count_documents())
                 result = Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)])
             else:
                 return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
