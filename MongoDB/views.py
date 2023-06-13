@@ -354,7 +354,16 @@ def database(request, query=''):
             collection = request.GET.get('coll','')
             lastInputs = request.GET.get('n','')
             if not database == '' and collection == '':
-                result = Client[database].list_collection_names()
+                collections = Client[database].list_collection_names()
+                result = []
+                for coll in collections:
+                    ret = {
+                        'database': database,
+                        'collection': coll,
+                        'doc_count': Client[database][coll].estimated_document_count()
+                    }
+                    result.append(ret)
+                                    
             elif not database == '' and not collection == '' and not lastInputs == '':
                 lastInputs = int(lastInputs)
                 result = json.loads(json.dumps(list(Client[database][collection].find(limit=lastInputs, sort=[('dateTime', -1)])), cls=NanConverter, allow_nan=False))
