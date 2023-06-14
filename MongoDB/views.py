@@ -406,11 +406,9 @@ def action(request, query=''):
             database = raw['database']
             action = json.loads(json.dumps(list(LocalCollection.find({'name': raw['action']})), cls=NanConverter, allow_nan=False))
             action = {}
-            action.update({
-                'dateTime': datetime.datetime.now(),
-                'status': 0,
-                'source': 2
-            })
+            action['dateTime'] = datetime.datetime.now()
+            action['source'] = 'Admin'
+            action['status'] = 'wait'
             
             print(database)
             result = Client[database]['/actions'].insert_one(document=action).acknowledged
