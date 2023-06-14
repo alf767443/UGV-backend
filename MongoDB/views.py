@@ -404,7 +404,8 @@ def action(request, query=''):
         try:
             raw=JSONParser().parse(request)
             database = raw['database']
-            action = json.loads(json.dumps(list(LocalCollection.find({'name': raw['action']})), cls=NanConverter, allow_nan=False))
+            action = json.loads(json.dumps(LocalCollection.find_one({'name': raw['action']}), cls=NanConverter, allow_nan=False))
+
             action['dateTime'] = datetime.datetime.now()
             action['source'] = 'Admin'
             action['status'] = 'wait'
