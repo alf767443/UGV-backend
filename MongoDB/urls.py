@@ -27,4 +27,7 @@ urlpatterns=[
 
     # Database query
     url(r'^database/$', database, name='robot'), # type: ignore     
+
+    # Database query
+    url(r'^action/$', action, name='action'), # type: ignore     
 ]
