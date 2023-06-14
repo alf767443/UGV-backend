@@ -405,7 +405,6 @@ def action(request, query=''):
             raw=JSONParser().parse(request)
             database = raw['database']
             action = json.loads(json.dumps(list(LocalCollection.find({'name': raw['action']})), cls=NanConverter, allow_nan=False))
-            action = {}
             action['dateTime'] = datetime.datetime.now()
             action['source'] = 'Admin'
             action['status'] = 'wait'
