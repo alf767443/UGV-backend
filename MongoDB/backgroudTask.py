@@ -53,11 +53,22 @@ def log(robot, script, msg, type):
     }
     Logs.insert_one(document=out).acknowledged
 
-def rospub(robot, topic, comand):
-    return True
+def action(robot, action):
+    _robot = Client['CeDRI_dashboard']['robots'].find_one(filter={'name': robot})
+    _action = Client['CeDRI_dashboard']['actions'].find_one(filter={'name': action})
+    del _action['_id']
+    _action['status'] = 'wait'
+    _action['source'] = 'Cloud'
+    return Client[_robot['database']]['/actions'].insert_one(document=_action).acknowledged
 
-def action(robot, command):
-    return True
+def command(robot, command):
+    _robot = Client['CeDRI_dashboard']['robots'].find_one(filter={'name': robot})
+    _action = {
+        'status': 'wait',
+        'source': 'cloud',
+        'command': command
+    }
+    return Client[_robot['database']]['/actions'].insert_one(document=_action).acknowledged
 
 def updateCode(metaCode, set):
     return Scripts.update_one(filter={'name': metaCode['name']}, update={'$set': set}).acknowledged
