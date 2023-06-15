@@ -98,13 +98,13 @@ def runCode(metaCode):
 
     except Exception as e:
         log(robot=robot, msg=str(e),type='error', script=_id)
-        statusExec(metaCode=metaCode, status='error', script=_id)
+        statusExec(metaCode=metaCode, status='error')
 
     try:
         code = compile(code, "<string>", "exec")
     except Exception as e:
         log(robot=robot, msg=str(e),type='error', script=_id)
-        statusExec(metaCode=metaCode, status='error', script=_id)
+        statusExec(metaCode=metaCode, status='error')
 
     try:
         statusExec(metaCode=metaCode, status='run')
@@ -113,7 +113,7 @@ def runCode(metaCode):
             statusExec(metaCode=metaCode, status='wait')
     except Exception as e:
         log(robot=robot, msg=str(e),type='error', script=_id)
-        statusExec(metaCode=metaCode, status='error', script=_id)
+        statusExec(metaCode=metaCode, status='error')
 
 def nextSleep(max = 10):
     pipeline = [
