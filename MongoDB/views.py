@@ -411,17 +411,28 @@ def action(request, query=''):
     elif request.method == 'OPTIONS':
         try:
             raw=JSONParser().parse(request)
-            database = raw['database']
-            action = json.loads(json.dumps(LocalCollection.find_one({'name': raw['action']}), cls=NanConverter, allow_nan=False))
+            query = request.GET.get('robot','')
+            if query == '0':
+                database = raw['database']
+                action = json.loads(json.dumps(LocalCollection.find_one({'name': raw['action']}), cls=NanConverter, allow_nan=False))
 
-            action['dateTime'] = datetime.datetime.now()
-            action['source'] = 'Admin'
-            action['status'] = 'wait'
-            
-            print(database)
-            result = Client[database]['/actions'].insert_one(document=action).acknowledged
-            print(result)
-            return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+                action['dateTime'] = datetime.datetime.now()
+                action['source'] = 'Admin'
+                action['status'] = 'wait'
+                
+                print(database)
+                result = Client[database]['/actions'].insert_one(document=action).acknowledged
+                print(result)
+                return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+            elif query == '1':
+                print(raw)
+                pipeline = raw['pipeline']
+                print(pipeline)
+                result = json.loads(json.dumps(list(LocalCollection.aggregate(pipeline=pipeline)), cls=NanConverter, allow_nan=False))
+                print(result)
+                return JsonResponse(data=result,safe=False, status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_400_BAD_REQUEST)
     
