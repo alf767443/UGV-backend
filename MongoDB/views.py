@@ -411,7 +411,7 @@ def action(request, query=''):
     elif request.method == 'OPTIONS':
         try:
             raw=JSONParser().parse(request)
-            query = request.GET.get('robot','')
+            query = request.GET.get('query','')
             if query == '0':
                 database = raw['database']
                 action = json.loads(json.dumps(LocalCollection.find_one({'name': raw['action']}), cls=NanConverter, allow_nan=False))
