@@ -415,7 +415,7 @@ def action(request, query=''):
             if query == '0':
                 database = raw['database']
                 action = json.loads(json.dumps(LocalCollection.find_one({'name': raw['action']}), cls=NanConverter, allow_nan=False))
-
+                del action['_id']
                 action['dateTime'] = datetime.datetime.now()
                 action['source'] = 'Admin'
                 action['status'] = 'wait'
