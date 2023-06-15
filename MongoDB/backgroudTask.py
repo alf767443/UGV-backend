@@ -94,7 +94,7 @@ def runCode(metaCode):
         robot = metaCode['robot']     
         code = code.replace('log(', 'log(robot="' + robot + '",script="' + _id + '",' )
         code = code.replace('action(', 'action(robot="' + robot + '",' )
-        code = code.replace('command(', 'action(robot="' + robot + '",' )
+        code = code.replace('command(', 'command(robot="' + robot + '",' )
 
     except Exception as e:
         log(robot=robot, msg=str(e),type='error', script=_id)
