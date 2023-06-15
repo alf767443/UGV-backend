@@ -352,13 +352,21 @@ def action(request, query=''):
     if  request.method =='GET':
         try:
             name = request.GET.get('name','')
+            robot = request.GET.get('robot','')
             print(name)
+            print(robot)
             if name == '':
                 result = json.loads(json.dumps(list(LocalCollection.find({})), cls=NanConverter, allow_nan=False))   
                 print(result)
-            else:
-                result = json.loads(json.dumps(list(LocalCollection.find({'name': name})), cls=NanConverter, allow_nan=False))   
+            elif not name == '':
+                result = json.loads(json.dumps(LocalCollection.find_one({'name': name}), cls=NanConverter, allow_nan=False))
                 print(result)
+            elif not robot  == '':
+                result = json.loads(json.dumps(list(LocalCollection.find({'robot': name})), cls=NanConverter, allow_nan=False))
+                print(result)                
+            else:
+                return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
+                
             return JsonResponse(data=result,safe=False, status=status.HTTP_302_FOUND)
         except Exception as e:  
             return JsonResponse({'error': type(e).__name__, 'args': e.args},safe=False, status=status.HTTP_404_NOT_FOUND)
