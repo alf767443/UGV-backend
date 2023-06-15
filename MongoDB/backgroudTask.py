@@ -98,13 +98,13 @@ def runCode(metaCode):
 
     except Exception as e:
         log(robot=robot, msg=str(e),type='error', script=_id)
-        statusExec(metaCode=metaCode, status='error')
+        statusExec(metaCode=metaCode, status='error', script=_id)
 
     try:
         code = compile(code, "<string>", "exec")
     except Exception as e:
         log(robot=robot, msg=str(e),type='error', script=_id)
-        statusExec(metaCode=metaCode, status='error')
+        statusExec(metaCode=metaCode, status='error', script=_id)
 
     try:
         statusExec(metaCode=metaCode, status='run')
