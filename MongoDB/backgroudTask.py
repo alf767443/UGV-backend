@@ -97,13 +97,13 @@ def runCode(metaCode):
         code = code.replace('command(', 'action(robot="' + robot + '",' )
 
     except Exception as e:
-        log(robot=robot, msg=e,type='error', script=_id)
+        log(robot=robot, msg=str(e),type='error', script=_id)
         statusExec(metaCode=metaCode, status='error')
 
     try:
         code = compile(code, "<string>", "exec")
     except Exception as e:
-        log(robot=robot, msg=e,type='error', script=_id)
+        log(robot=robot, msg=str(e),type='error', script=_id)
         statusExec(metaCode=metaCode, status='error')
 
     try:
@@ -112,7 +112,7 @@ def runCode(metaCode):
         if Scripts.find_one(filter={'name': metaCode['name']})['status'] == 'run':
             statusExec(metaCode=metaCode, status='wait')
     except Exception as e:
-        log(robot=robot, msg=e,type='error', script=_id)
+        log(robot=robot, msg=str(e),type='error', script=_id)
         statusExec(metaCode=metaCode, status='error', script=_id)
 
 def nextSleep(max = 10):
