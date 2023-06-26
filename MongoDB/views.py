@@ -417,7 +417,7 @@ def action(request, query=''):
                 action = json.loads(json.dumps(LocalCollection.find_one({'name': raw['action']}), cls=NanConverter, allow_nan=False))
                 del action['_id']
                 action['dateTime'] = datetime.datetime.now()
-                action['source'] = 'Admin'
+                action['source'] = 'admin'
                 action['status'] = 'wait'
                 
                 print(database)
